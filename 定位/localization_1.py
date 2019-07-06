@@ -4,7 +4,7 @@ Created on Fri Jul  5 10:12:02 2019
 
 @author: 12928
 """
-p = [0,1,0,0,0]
+p = [0.2,0.2,0.2,0.2,0.2]
 pHit = 0.6
 pMiss = 0.2
 pExact = 0.8
@@ -13,6 +13,7 @@ pUndershoot = 0.1
 
 world = ['green','red','red','green','green']
 measurements = ['red','green']
+motions = [1,1]
 def sense(p,Z):
     q = []
     for i in range(len(world)):
@@ -22,9 +23,7 @@ def sense(p,Z):
     for i in range(len(q)):
         q[i] = q[i] / s
     return q
-#for k in range(len(measurements)):
-#    sense(p,measurements[k])
-    
+
 def move(p,U):
     q = []
     for i in range(len(p)):
@@ -34,8 +33,9 @@ def move(p,U):
         q.append(s)
     return q
 
-for i in range(1000):
-    p = move(p,1)
+for k in range(len(measurements)):
+    p = sense(p,measurements[k])
+    p = move(p,motions[k])
 print(p)
 
 
