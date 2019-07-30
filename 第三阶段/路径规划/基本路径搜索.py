@@ -3,9 +3,9 @@
 # 1 = occupied space
 grid = [[0,0,1,0,0,0],
 		[0,0,1,0,0,0],
-		[0,0,0,0,1,0],
+		[0,0,1,0,1,0],
 		[0,0,1,1,1,0],
-		[0,0,0,0,1,0]]
+		[0,0,1,0,1,0]]
 init = [0,0]
 cost = 1
 goal = [len(grid)-1,len(grid[0])-1]
@@ -17,10 +17,12 @@ delta = [[-1,0], # go up
 def search():
 	#openlistelementsareofthetype:[g,x,y]
     closed=[[0 for row in range(len(grid[0]))] for col in range(len(grid))]
+    expand=[[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
     closed[init[0]][init[1]]=1
     x=init[0]
     y=init[1]
     g = 0
+    count = 0
     open = [[g,x,y]]
     found = False # flag that is set when search complete
     resign = False #flag set if we can't find expand
@@ -45,6 +47,8 @@ def search():
             print(next)
             x = next[1]
             y = next[2]
+            expand[x][y] = count
+            count += 1
             g = next[0]
             #check if we are done
             if x == goal[0] and y == goal[1]:
@@ -71,6 +75,8 @@ def search():
                         print(' ',open[i])
                         
                     print('-----------------')
+    for i in range(len(expand)):
+        print(expand[i])
                 
 search()
                 
