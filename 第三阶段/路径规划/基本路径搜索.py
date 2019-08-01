@@ -3,7 +3,7 @@
 # 1 = occupied space
 grid = [[0,0,1,0,0,0],
 		[0,0,1,0,0,0],
-		[0,0,1,0,1,0],
+		[0,0,0,0,1,0],
 		[0,0,1,1,1,0],
 		[0,0,1,0,1,0]]
 init = [0,0]
@@ -11,18 +11,18 @@ cost = 1
 goal = [len(grid)-1,len(grid[0])-1]
 delta = [[-1,0], # go up
 		[0,-1],  #go left
-		[1,0],	#godown
-		[0,1]]	#goright
+		[1,0],	#go down
+		[0,1]]	#go right
+delta_name = ['^', '<', 'v', '>']
 
-def search():
+def search(grid,init,goal,cost):
 	#openlistelementsareofthetype:[g,x,y]
     closed=[[0 for row in range(len(grid[0]))] for col in range(len(grid))]
-    expand=[[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
+    action=[[-1 for row in range(len(grid[0]))] for col in range(len(grid))]
     closed[init[0]][init[1]]=1
     x=init[0]
     y=init[1]
     g = 0
-    count = 0
     open = [[g,x,y]]
     found = False # flag that is set when search complete
     resign = False #flag set if we can't find expand
@@ -47,8 +47,6 @@ def search():
             print(next)
             x = next[1]
             y = next[2]
-            expand[x][y] = count
-            count += 1
             g = next[0]
             #check if we are done
             if x == goal[0] and y == goal[1]:
@@ -69,16 +67,26 @@ def search():
                             print([g2,x2,y2])
                             print('-----------------')
                             closed[x2][y2] = 1
+                            action[x2][y2] = i
                             
                     print ('new open list')
                     for i in range(len(open)):
                         print(' ',open[i])
                         
                     print('-----------------')
-    for i in range(len(expand)):
-        print(expand[i])
-                
-search()
+    policy = [[' ' for row in range(len(grid[0]))] for col in range(len(grid[1]))]
+    x = goal[0]
+    y = goal[1]
+    policy[x][y] = '*'
+    while x != init[0] or y != init[1]:
+        x2 = x - delta[action[x][y]][0]
+        y2 = y - delta[action[x][y]][1]
+        policy[x2][y2] = delta_name[action[x][y]]
+        x= x2
+        y = y2
+    for i in range(len(policy)):
+        print(policy[i])
+search(grid,init,goal,cost)
                 
     
         
